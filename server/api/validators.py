@@ -1,5 +1,5 @@
 from django.core.exceptions import ValidationError
-import json
+
 
 def validate_json_format(json_data):
     if not isinstance(json_data, list):
