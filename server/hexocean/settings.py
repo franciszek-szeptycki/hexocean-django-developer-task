@@ -71,7 +71,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 #   Custom settings   #
 #######################
 
-STATIC_URL = "static/"
+import os
+
 
 INSTALLED_APPS += [
     "api",
@@ -101,3 +102,7 @@ REST_FRAMEWORK = {
     #     'rest_framework.permissions.IsAuthenticated',
     # ],
 }
+
+STATIC_URL = "static/"
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

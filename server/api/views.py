@@ -1,9 +1,10 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .models import CustomUser, AccountTier
 from rest_framework.authtoken.models import Token
-from django.contrib.auth import login
-from .serializers import LoginSerializer
+from .serializers import LoginSerializer, ImageSerializer
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.authentication import TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 @api_view(['POST'])
 def login_view(request):
@@ -17,5 +18,18 @@ def login_view(request):
     return Response({'token': token.key})
 
 
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def image_view(request):
 
+    user = request.user
+    request_data = request.data.copy()
+    request_data.update({'user': user.id})
 
+    file_serializer = ImageSerializer(data=request_data)
+    
+    file_serializer.is_valid(raise_exception=True)
+    file_serializer.save()
+    
+    return Response(file_serializer.data)
