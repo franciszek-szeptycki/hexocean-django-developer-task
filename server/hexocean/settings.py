@@ -72,6 +72,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 #######################
 
 import os
+import dotenv
+
+dotenv.load_dotenv()
 
 
 INSTALLED_APPS += [
@@ -90,17 +93,14 @@ DATABASES = {
     }
 }
 
-SECRET_KEY = "django-insecure-lyr(!jh@pwy62vwm5uh(nt$g6o8)(y90h^2&fal-f0!ku+*)+a"
-DEBUG = True
-ALLOWED_HOSTS = []
+SECRET_KEY = os.getenv('SECRET_KEY')
+DEBUG = os.getenv('DEBUG') == 'True'
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
     ],
-    # 'DEFAULT_PERMISSION_CLASSES': [
-    #     'rest_framework.permissions.IsAuthenticated',
-    # ],
 }
 
 STATIC_URL = "static/"

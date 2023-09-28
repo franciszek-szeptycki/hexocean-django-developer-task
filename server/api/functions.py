@@ -1,10 +1,13 @@
 from django.core.files.uploadedfile import InMemoryUploadedFile
 from PIL import Image as PILImage
-import sys, io, uuid
 from .models import Thumbnail
+from rest_framework import serializers
+import sys, io, uuid, os, dotenv
 
+dotenv.load_dotenv()
+DOMAIN = os.getenv('DOMAIN')
 
-def __create(instance, size, format):
+def create_thumbnail(instance, size, format):
     tmb = PILImage.open(instance.image.path)
     width = size.get('width') or sys.maxsize
     height = size.get('height') or sys.maxsize
@@ -22,6 +25,5 @@ def __create(instance, size, format):
     return Thumbnail.objects.create(original=instance, image=tmb_file, width=width, height=height).image.url
 
 
-def create_thumbnails(instance, sizes, format):
-    return [ __create(instance, size, format) for size in sizes ]
-
+def get_full_url(url):
+    return "https://" + DOMAIN + url

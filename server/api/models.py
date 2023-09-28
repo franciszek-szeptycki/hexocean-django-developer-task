@@ -6,6 +6,7 @@ from .validators import validate_json_format
 class AccountTier(models.Model):
     name = models.CharField(max_length=100)
     thumbnail_size = models.JSONField(default=[{}] ,validators=[validate_json_format])
+    original_link = models.BooleanField(default=False)
 
     def __str__(self):
         return self.name
@@ -17,7 +18,7 @@ class CustomUser(AbstractUser):
 
 class Image(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='images')
-    image = models.ImageField(upload_to='images/original/', null=True, blank=True)
+    image = models.ImageField(upload_to='original/', null=True, blank=True)
     thumbnail_links = models.JSONField(null=True, blank=True)
 
     def __str__(self):
@@ -26,7 +27,7 @@ class Image(models.Model):
 
 class Thumbnail(models.Model):
     original = models.ForeignKey(Image, on_delete=models.CASCADE, default=None)
-    image = models.ImageField(upload_to='images/thumbnails/')
+    image = models.ImageField(upload_to='thumbnails/')
     width = models.IntegerField()
     height = models.IntegerField()
 

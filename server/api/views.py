@@ -1,7 +1,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
-from .serializers import LoginSerializer, ImageSerializer
+from .serializers import LoginSerializer, ImageSerializer, ImageViewSerializer
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
@@ -37,5 +37,5 @@ def image_view(request):
     
     if request.method == 'GET':
         images = user.images.all()
-        serializer = ImageSerializer(images, many=True)
-        return Response(serializer.data)
+        serializers = ImageViewSerializer(images, many=True)
+        return Response(image for image in serializers.data)
