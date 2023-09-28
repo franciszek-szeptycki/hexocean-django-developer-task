@@ -18,18 +18,25 @@ def login_view(request):
     return Response({'token': token.key})
 
 
-@api_view(['POST'])
+@api_view(['POST', 'GET'])
 @authentication_classes([TokenAuthentication])
 @permission_classes([IsAuthenticated])
 def image_view(request):
 
     user = request.user
-    request_data = request.data.copy()
-    request_data.update({'user': user.id})
 
-    file_serializer = ImageSerializer(data=request_data)
+    if request.method == 'POST':
+        request_data = request.data.copy()
+        request_data.update({'user': user.id})
+
+        file_serializer = ImageSerializer(data=request_data)
+        
+        file_serializer.is_valid(raise_exception=True)
+        file_serializer.save()
+        
+        return Response(file_serializer.data)
     
-    file_serializer.is_valid(raise_exception=True)
-    file_serializer.save()
-    
-    return Response(file_serializer.data)
+    elif request.method == 'GET':
+        images = user.images.all()
+        serializer = ImageSerializer(images, many=True)
+        return Response(serializer.data)
