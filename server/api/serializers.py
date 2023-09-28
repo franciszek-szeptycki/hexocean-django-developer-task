@@ -41,6 +41,9 @@ class ImageSerializer(serializers.ModelSerializer):
 
 
     def validate_image(self, value):
+        if value is None:
+            raise serializers.ValidationError("Must include 'image'.")
+
         ext = os.path.splitext(value.name)[1]
         valid_extensions = ['.jpg', '.png']
         
@@ -51,6 +54,7 @@ class ImageSerializer(serializers.ModelSerializer):
     
 
     def create(self, validated_data):
+
         image = validated_data.get('image')
         user = validated_data.get('user')
         
