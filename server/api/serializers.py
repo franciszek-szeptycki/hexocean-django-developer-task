@@ -3,7 +3,7 @@ from rest_framework import serializers
 from .models import Image
 import os, uuid
 from django.core.exceptions import ValidationError
-from .functions import create_thumbnail, get_full_url
+from .functions import create_thumbnail, get_full_url, format_image_instance
 
 
 class LoginSerializer(serializers.Serializer):
@@ -63,29 +63,8 @@ class ImageSerializer(serializers.ModelSerializer):
 
         return instance
         
-    
-class ImageViewSerializer(serializers.ModelSerializer):
-
-    image = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Image
-        fields = ('image', 'thumbnail_links')
-
-    def get_image(self, instance):
-        return get_full_url(instance.image.url)
-
-    def to_representation(self, instance):
-        representation = super().to_representation(instance)
-        
-        if not instance.user.account_tier.original_link:
-            representation.pop('image')
-
-        return representation
-
 
 class ImageListSerializer(serializers.ModelSerializer):
-
     image = serializers.SerializerMethodField()
 
     class Meta:
@@ -93,4 +72,4 @@ class ImageListSerializer(serializers.ModelSerializer):
         fields = ('image', )
 
     def get_image(self, instance):
-        return get_full_url(instance.image.url)
+        return get_full_url(instance)
