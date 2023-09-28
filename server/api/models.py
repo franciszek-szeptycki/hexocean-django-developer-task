@@ -23,6 +23,7 @@ class Image(models.Model):
     def __str__(self):
         return f"{self.user.username} - {self.image}"
     
+
 class Thumbnail(models.Model):
     original = models.ForeignKey(Image, on_delete=models.CASCADE, default=None)
     image = models.ImageField(upload_to='images/thumbnails/')
@@ -31,3 +32,4 @@ class Thumbnail(models.Model):
 
     def __str__(self):
         return f"{self.image} - {self.width}x{self.height}"
+    

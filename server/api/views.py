@@ -26,17 +26,16 @@ def image_view(request):
     user = request.user
 
     if request.method == 'POST':
-        request_data = request.data.copy()
-        request_data.update({'user': user.id})
+        data = request.data.copy()
+        data['user'] = user.id
+        serializer = ImageSerializer(data=data)
 
-        file_serializer = ImageSerializer(data=request_data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
         
-        file_serializer.is_valid(raise_exception=True)
-        file_serializer.save()
-        
-        return Response(file_serializer.data)
+        return Response(serializer.data)
     
-    elif request.method == 'GET':
+    if request.method == 'GET':
         images = user.images.all()
         serializer = ImageSerializer(images, many=True)
         return Response(serializer.data)
