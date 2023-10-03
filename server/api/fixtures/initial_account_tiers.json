@@ -1,0 +1,29 @@
+[
+    {
+        "model": "api.accounttier",
+        "pk": 1,
+        "fields": {
+            "name": "Basic",
+            "thumbnail_size": [{ "height": 200 }],
+            "original_link": false
+        }
+    },
+    {
+        "model": "api.accounttier",
+        "pk": 2,
+        "fields": {
+            "name": "Premium",
+            "thumbnail_size": [{ "height": 200 }, { "height": 400 }],
+            "original_link": true
+        }
+    },
+    {
+        "model": "api.accounttier",
+        "pk": 3,
+        "fields": {
+            "name": "Enterprise",
+            "thumbnail_size": [{ "height": 200 }, { "height": 400 }],
+            "original_link": true
+        }
+    }
+]
