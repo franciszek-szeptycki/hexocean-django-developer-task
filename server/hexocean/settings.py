@@ -103,7 +103,8 @@ REST_FRAMEWORK = {
     ],
 }
 
-STATIC_URL = "static/"
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+STATIC_URL = os.getenv('STATIC_URL')
+STATIC_ROOT = os.path.join(BASE_DIR, os.getenv('STATIC_ROOT'))
+
+MEDIA_URL = os.getenv('MEDIA_URL')
+MEDIA_ROOT = os.path.join(BASE_DIR, os.getenv('MEDIA_ROOT'))

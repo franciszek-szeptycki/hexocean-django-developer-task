@@ -5,8 +5,6 @@ from rest_framework import serializers
 import sys, io, uuid, os, dotenv
 from .models import CustomUser, Image
 
-dotenv.load_dotenv()
-DOMAIN = os.getenv('DOMAIN')
 
 def create_thumbnail(instance, size, format):
     tmb = PILImage.open(instance.image.path)
@@ -26,8 +24,12 @@ def create_thumbnail(instance, size, format):
     return Thumbnail.objects.create(original=instance, image=tmb_file, width=width, height=height).image.url
 
 
+dotenv.load_dotenv()
+DOMAIN = os.getenv('DOMAIN')
+SSL = os.getenv('SSL') == 'True'
+
 def get_full_url(url):
-    return "https://" + DOMAIN + url
+    return f"http{'s' if SSL else ''}://" + DOMAIN + url
 
 
 def format_image_instance(instance):
