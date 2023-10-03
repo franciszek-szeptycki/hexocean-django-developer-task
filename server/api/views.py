@@ -1,11 +1,13 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
-from .serializers import LoginSerializer, ImageSerializer, ImageListSerializer
+from .serializers import LoginSerializer, ImageSerializer, ImageListSerializer, ExpiringLinkSerializer
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
-from .functions import format_image_instance
+from datetime import datetime, timedelta
+from .models import ExpiringLink
+
 
 @api_view(['POST'])
 def login_view(request):
@@ -29,14 +31,34 @@ def image_view(request):
     if request.method == 'POST':
         data = request.data.copy()
         data['user'] = user.id
-        serializer = ImageSerializer(data=data)
+        serializer = ImageSerializer(data=data, context={'request': request})
 
         serializer.is_valid(raise_exception=True)
         serializer.save()
         
-        return Response(format_image_instance(serializer.data))
+        return Response(serializer.data)
     
     if request.method == 'GET':
         images = user.images.all()
-        serializers = ImageListSerializer(images, many=True)
+        serializers = ImageListSerializer(images, many=True, context={'request': request})
         return Response(image for image in serializers.data)
+
+
+@api_view(['POST'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def create_link_view(request):
+
+    serializer = ExpiringLinkSerializer(data=request.data, context={'request': request})
+    serializer.is_valid(raise_exception=True)
+    serializer.save()
+
+    return Response(serializer.data)
+
+    # return Response({"link": get_full_link(link.token)})
+
+# @api_view(['GET'])
+# @authentication_classes([TokenAuthentication])
+# @permission_classes([IsAuthenticated])
+# def link_view(request, token):
+

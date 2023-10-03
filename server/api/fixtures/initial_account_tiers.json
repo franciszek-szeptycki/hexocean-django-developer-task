@@ -5,7 +5,8 @@
         "fields": {
             "name": "Basic",
             "thumbnail_size": [{ "height": 200 }],
-            "original_link": false
+            "original_link": false,
+            "expiring_link": false
         }
     },
     {
@@ -14,7 +15,8 @@
         "fields": {
             "name": "Premium",
             "thumbnail_size": [{ "height": 200 }, { "height": 400 }],
-            "original_link": true
+            "original_link": true,
+            "expiring_link": false
         }
     },
     {
@@ -23,7 +25,8 @@
         "fields": {
             "name": "Enterprise",
             "thumbnail_size": [{ "height": 200 }, { "height": 400 }],
-            "original_link": true
+            "original_link": true,
+            "expiring_link": true
         }
     }
 ]
