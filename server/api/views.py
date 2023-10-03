@@ -5,8 +5,9 @@ from .serializers import LoginSerializer, ImageSerializer, ImageListSerializer, 
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
-from datetime import datetime, timedelta
-from .models import ExpiringLink
+from .models import ExpiringLink, Image
+from django.utils import timezone
+from django.http import HttpResponse
 
 
 @api_view(['POST'])
@@ -55,10 +56,19 @@ def create_link_view(request):
 
     return Response(serializer.data)
 
-    # return Response({"link": get_full_link(link.token)})
 
-# @api_view(['GET'])
-# @authentication_classes([TokenAuthentication])
-# @permission_classes([IsAuthenticated])
-# def link_view(request, token):
+@api_view(['GET'])
+def token_view(_, token):
 
+    link = ExpiringLink.objects.filter(token=token).first()
+    if not link:
+        return Response({'error': 'Invalid token.'}, status=400)
+
+    if link.expiration_time < timezone.now():
+        link.delete()
+        return Response({'error': 'Token expired.'}, status=400)
+    
+    image = Image.objects.filter(id=link.image_id.id).first()
+
+    with open(image.image.path, 'rb') as f:
+        return HttpResponse(f.read(), content_type="image/png")

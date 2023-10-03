@@ -107,5 +107,5 @@ class ExpiringLinkSerializer(serializers.ModelSerializer):
     
     def to_representation(self, instance):
         return {
-            'link': f"{self.context['request'].build_absolute_uri('/')}{instance.token}"
+            'link': f"{self.context['request'].build_absolute_uri('/')}token/{instance.token}"
         }
