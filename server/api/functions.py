@@ -22,25 +22,3 @@ def create_thumbnail(instance, size, format):
     )
     
     return Thumbnail.objects.create(original=instance, image=tmb_file, width=width, height=height).image.url
-
-
-# dotenv.load_dotenv()
-# DOMAIN = os.getenv('DOMAIN')
-# SSL = os.getenv('SSL') == 'True'
-
-# def get_full_link(url):
-#     link = "http"
-#     if SSL:
-#         link += "s"
-#     link += "://" + DOMAIN + url
-#     return link
-
-
-# def format_image_instance(instance):
-#     data = {
-#         'thumbnail_links': [get_full_link(link) for link in instance["thumbnail_links"]]
-#     }
-#     if CustomUser.objects.filter(id=instance["user"]).first().account_tier.original_link:
-#         data['image'] = get_full_link(instance["image"])
-    
-#     return data

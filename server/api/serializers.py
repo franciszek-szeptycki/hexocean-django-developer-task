@@ -67,6 +67,7 @@ class ImageSerializer(serializers.ModelSerializer):
     
     def to_representation(self, instance):
         return {
+            "id": instance.id,
             "original": self.context['request'].build_absolute_uri(instance.image.url),
             "thumbnails": [self.context['request'].build_absolute_uri(link) for link in instance.thumbnail_links]
         }
@@ -80,10 +81,19 @@ class ImageListSerializer(serializers.ModelSerializer):
 
 class ExpiringLinkSerializer(serializers.ModelSerializer):
     time = serializers.IntegerField(write_only=True)
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
     class Meta:
         model = ExpiringLink
-        fields = ('image_id', 'time', 'token',)
+        fields = ('image_id', 'time', 'token', 'user')
+
+    def validate_user(self, user):
+        if not user.account_tier:
+            raise ValidationError("User has no account tier.")
+        elif user.account_tier.expiring_link == False:
+            raise ValidationError("User's account tier does not support expiring links.")   
+        return user
+    
 
     def validate_time(self, value: int):
         time_delta = timedelta(seconds=value)
@@ -107,5 +117,5 @@ class ExpiringLinkSerializer(serializers.ModelSerializer):
     
     def to_representation(self, instance):
         return {
-            'link': f"{self.context['request'].build_absolute_uri('/')}token/{instance.token}"
+            'link': f"{self.context['request'].build_absolute_uri('/')}api/token/{instance.token}"
         }
