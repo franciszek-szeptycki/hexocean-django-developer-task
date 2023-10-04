@@ -34,13 +34,16 @@ class ImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Image
         fields = ('id', 'image', 'user', 'thumbnail_links')
-        extra_kwargs = {'image': {'required': True}}
+        extra_kwargs = {
+            'image': {'required': True},
+            'user': {'write_only': True},
+        }
 
     def validate_user(self, user):
         if not user.account_tier:
             raise ValidationError("User has no account tier.")
         return user
-    
+
     def validate_image(self, image):
 
         if not image:

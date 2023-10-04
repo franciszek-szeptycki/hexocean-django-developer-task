@@ -5,7 +5,6 @@ from rest_framework import serializers
 import sys, io, uuid, os, dotenv
 from .models import CustomUser, Image
 
-
 def create_thumbnail(instance, size, format):
     tmb = PILImage.open(instance.image.path)
     width = size.get('width') or sys.maxsize

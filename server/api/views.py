@@ -36,12 +36,12 @@ def image_view(request):
 
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        
+
         return Response(serializer.data)
     
     if request.method == 'GET':
-        images = user.images.all()
-        serializers = ImageListSerializer(images, many=True, context={'request': request})
+        images = Image.objects.filter(user=user).order_by('-id')
+        serializers = ImageSerializer(images, many=True, context={'request': request})
         return Response(image for image in serializers.data)
 
 
