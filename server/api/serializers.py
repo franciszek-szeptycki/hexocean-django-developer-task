@@ -65,15 +65,16 @@ class ImageSerializer(serializers.ModelSerializer):
 
         links = [create_thumbnail(instance, size, ext) for size in user.account_tier.thumbnail_size]
         instance.thumbnail_links = links
+        instance.save()
 
         return instance
     
-    def to_representation(self, instance):
-        return {
-            "id": instance.id,
-            "original": self.context['request'].build_absolute_uri(instance.image.url),
-            "thumbnails": [self.context['request'].build_absolute_uri(link) for link in instance.thumbnail_links]
-        }
+    # def to_representation(self, instance):
+    #     return {
+    #         "id": instance.id,
+    #         "original": self.context['request'].build_absolute_uri(instance.image.url),
+    #         "thumbnails": [self.context['request'].build_absolute_uri(link) for link in instance.thumbnail_links]
+    #     }
         
 
 class ImageListSerializer(serializers.ModelSerializer):
