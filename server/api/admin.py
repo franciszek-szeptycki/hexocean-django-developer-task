@@ -9,7 +9,7 @@ from .validators import validate_json_format
 
 
 # Load initial account tiers used to prevent editing or deleting them
-file_path = os.path.join(settings.BASE_DIR, 'fixtures.json')
+file_path = os.path.join(settings.BASE_DIR, 'tools', 'fixtures.json')
 with open(file_path, 'r') as file:
     data = json.load(file)
 restricted_names = [item["fields"]["name"] for item in data]
