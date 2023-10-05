@@ -4,11 +4,9 @@ services:
   db:
     image: postgres
     environment:
-      POSTGRES_DB: root
-      POSTGRES_USER: root
-      POSTGRES_PASSWORD: root
-    ports:
-      - '4000:5432'
+      POSTGRES_DB: '${POSTGRES_NAME}'
+      POSTGRES_USER: '${POSTGRES_USER}'
+      POSTGRES_PASSWORD: '${POSTGRES_PASSWORD}'
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
