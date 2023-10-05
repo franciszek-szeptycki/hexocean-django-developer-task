@@ -1,13 +1,13 @@
 #!/bin/sh
 
-set -e
+# set -e
 
-until PGPASSWORD=$POSTGRES_PASSWORD psql -h "db:5432" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c '\q'; do
-  >&2 echo "Postgres is unavailable - sleeping"
-  sleep 1
-done
+# until PGPASSWORD=$POSTGRES_PASSWORD psql -h "db:3000" -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c '\q'; do
+#   >&2 echo "Postgres is unavailable - sleeping"
+#   sleep 1
+# done
 
->&2 echo "Postgres is up - executing command"
+# >&2 echo "Postgres is up - executing command"
 
 python manage.py migrate
 python manage.py loaddata fixtures.json
