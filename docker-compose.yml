@@ -1,6 +1,22 @@
-version: '3'
+version: '3.4'
 
 services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_DB: root
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    ports:
+      - '4000:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U root']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   web:
     build: server
     ports:
@@ -10,6 +26,9 @@ services:
     volumes:
       - static_volume:/app/static
       - media_volume:/app/media
+    depends_on:
+      db:
+        condition: service_healthy
 
   nginx:
     image: nginx:alpine
@@ -25,3 +44,4 @@ services:
 volumes:
   static_volume:
   media_volume:
+  postgres_data:
