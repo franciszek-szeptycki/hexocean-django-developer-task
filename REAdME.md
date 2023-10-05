@@ -1,3 +1,9 @@
-mv .env.example .env
+## Live preview
+lorem ipsum
 
-```echo "from django.contrib.auth import get_user_model; User = get_user_model(); User.objects.create_superuser('admin', '', 'admin')" | python manage.py shell```
+## How to run on your won machine?
+1. `mv .env.example .env`
+2. docker-compose up
+
+### Documentation
+loremm
