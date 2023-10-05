@@ -9,7 +9,7 @@ from .validators import validate_json_format
 
 
 # Load initial account tiers used to prevent editing or deleting them
-file_path = os.path.join(settings.BASE_DIR, 'tools', 'fixtures.json')
+file_path = os.path.join(settings.BASE_DIR, 'fixtures.json')
 with open(file_path, 'r') as file:
     data = json.load(file)
 restricted_names = [item["fields"]["name"] for item in data]
@@ -29,3 +29,8 @@ class AccountTierAdmin(admin.ModelAdmin):
         if obj and obj.name in restricted_names:
             return [field.name for field in obj._meta.fields]
         return super().get_readonly_fields(request, obj=obj)
+    
+    def has_delete_permission(self, request, obj=None):
+        if obj and obj.name in restricted_names:
+            return False
+        return super().has_delete_permission(request, obj=obj)

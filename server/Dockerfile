@@ -1,4 +1,4 @@
-FROM python:3.9-alpine
+FROM python:3.8-slim-buster
 
 WORKDIR /usr/src/app
 
@@ -10,7 +10,5 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . /usr/src/app/
 
-RUN chmod +x tools/run-django.sh
-
-CMD tools/run-django.sh
+CMD gunicorn hexocean.wsgi:application --bind 0.0.0.0:8000
 
